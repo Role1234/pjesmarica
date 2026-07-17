@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin prijava</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+
+<div class="logo">
+
+<div class="logo-icon">
+🔐
+</div>
+
+
+<div>
+
+<h1>Admin prijava</h1>
+
+<p>Pjesmarica</p>
+
+</div>
+
+
+</div>
+
+
+</header>
+
+
+
+<main>
+
+
+<div class="song-page">
+
+
+<h2 class="admin-title">
+Prijava administratora
+</h2>
+
+
+
+<input
+id="email"
+class="admin-input"
+type="email"
+placeholder="Email adresa"
+>
+
+
+
+<input
+id="password"
+class="admin-input"
+type="password"
+placeholder="Lozinka"
+>
+
+
+
+<button 
+class="save-button"
+onclick="login()">
+
+🔐 Prijavi se
+
+</button>
+
+
+
+<p id="message"></p>
+
+
+
+</div>
+
+
+</main>
+
+
+
+<script src="supabase.js"></script>
+
+<script src="login.js"></script>
+
+
+</body>
+
+</html>
