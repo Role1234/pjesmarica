@@ -7,25 +7,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-<meta name="description" content="Administracija pjesmarice - dodavanje i uređivanje pjesama.">
-
-
 <title>Admin - Pjesmarica</title>
-
 
 <link rel="stylesheet" href="style.css">
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 </head>
 
 
-
 <body>
-
 
 
 <header class="topbar">
@@ -52,7 +43,17 @@
 
 
 
+<button
+class="admin-button"
+onclick="logout()">
+
+🚪 Odjava
+
+</button>
+
+
 </header>
+
 
 
 
@@ -62,132 +63,64 @@
 
 
 
+<!-- =====================
+     DODAVANJE PJESME
+===================== -->
+
+
 <div class="song-page">
 
 
-
 <h2 class="admin-title">
-
-Dodaj / Uredi pjesmu
-
+Dodaj novu pjesmu
 </h2>
 
 
 
-
-
-<input
-
-id="songId"
-
-type="hidden"
-
->
-
-
-
-
-
-
-
-<label for="title">
-
+<label>
 Naslov pjesme
-
 </label>
 
 
-
 <input
-
 id="title"
-
-name="title"
-
 class="admin-input"
-
-type="text"
-
-autocomplete="off"
-
-required
-
 placeholder="Naslov pjesme"
-
 >
 
 
 
 
-
-
-
-<label for="artist">
-
+<label>
 Izvođač
-
 </label>
-
 
 
 <input
-
 id="artist"
-
-name="artist"
-
 class="admin-input"
-
-type="text"
-
-autocomplete="off"
-
-required
-
 placeholder="Izvođač"
-
 >
 
 
 
 
-
-
-
-<label for="lyrics">
-
+<label>
 Tekst pjesme
-
 </label>
-
 
 
 <textarea
-
 id="lyrics"
-
-name="lyrics"
-
 class="admin-input admin-textarea"
-
-required
-
 placeholder="Tekst pjesme"
-
 ></textarea>
 
 
 
 
-
-
-
 <button
-
-type="button"
-
 class="save-button"
-
 onclick="saveSong()">
 
 💾 Spremi pjesmu
@@ -197,15 +130,8 @@ onclick="saveSong()">
 
 
 
-
-
-
 <button
-
-type="button"
-
 class="cancel-button"
-
 onclick="clearForm()">
 
 🧹 Očisti
@@ -215,29 +141,80 @@ onclick="clearForm()">
 
 
 
-
-
-
-<button
-
-type="button"
-
-class="cancel-button"
-
-onclick="logout()">
-
-🚪 Odjava
-
-</button>
-
-
-
-
-
-
-
 <p id="message"></p>
 
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =====================
+     PRETRAGA
+===================== -->
+
+
+<div class="song-page">
+
+
+<h2 class="admin-title">
+Sve pjesme
+</h2>
+
+
+
+<input
+id="adminSearch"
+class="admin-input"
+placeholder="🔍 Traži pjesmu ili izvođača..."
+>
+
+
+
+
+<select
+id="artistFilter"
+class="admin-input">
+
+
+<option value="">
+🎤 Svi izvođači
+</option>
+
+
+</select>
+
+
+
+
+
+<p
+id="songCounter"
+style="text-align:center;color:#9ca3af;">
+0 pjesama
+</p>
+
+
+
+
+
+<div id="adminSongs"></div>
+
+
+
+
+
+<!-- PAGINATION -->
+
+<div
+id="pagination"
+style="text-align:center;margin-top:25px;">
+</div>
 
 
 
@@ -249,6 +226,14 @@ onclick="logout()">
 
 
 
+
+
+<!-- =====================
+     MODAL UREĐIVANJE
+===================== -->
+
+
+<div id="editModal">
 
 
 
@@ -257,34 +242,80 @@ onclick="logout()">
 
 
 <h2 class="admin-title">
-
-Sve pjesme
-
+Uredi pjesmu
 </h2>
 
 
 
 
+<label>
+Naslov
+</label>
 
-<div id="adminSongs">
 
-Učitavanje pjesama...
+<input
+id="editTitle"
+class="admin-input"
+>
+
+
+
+
+
+<label>
+Izvođač
+</label>
+
+
+<input
+id="editArtist"
+class="admin-input"
+>
+
+
+
+
+
+<label>
+Tekst pjesme
+</label>
+
+
+<textarea
+id="editLyrics"
+class="admin-input admin-textarea">
+</textarea>
+
+
+
+
+
+<button
+class="save-button"
+onclick="updateSong()">
+
+💾 Spremi izmjene
+
+</button>
+
+
+
+
+
+<button
+class="cancel-button"
+onclick="closeModal()">
+
+❌ Zatvori
+
+</button>
+
+
 
 </div>
 
 
-
-
-
 </div>
-
-
-
-
-
-
-
-</main>
 
 
 
@@ -295,9 +326,6 @@ Učitavanje pjesama...
 <script src="supabase.js"></script>
 
 <script src="admin.js"></script>
-
-
-
 
 
 </body>

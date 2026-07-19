@@ -1,9 +1,19 @@
+let allSongs = [];
+
+let filteredSongs = [];
+
+let currentPage = 1;
+
+const songsPerPage = 50;
+
 let editId = null;
 
 
 
+
+
 // =========================
-// PROVJERA PRIJAVE
+// PROVJERA LOGIN
 // =========================
 
 
@@ -20,38 +30,7 @@ async function checkLogin(){
         window.location.href =
         "login.html";
 
-        return false;
-
     }
-
-
-    return true;
-
-
-}
-
-
-
-checkLogin();
-
-
-
-
-
-
-// =========================
-// PORUKE
-// =========================
-
-
-function showMessage(text){
-
-
-    const message =
-    document.getElementById("message");
-
-
-    message.textContent = text;
 
 
 }
@@ -67,17 +46,17 @@ function showMessage(text){
 // =========================
 
 
-async function loadAdminSongs(){
+async function loadSongs(){
 
 
 
     const { data, error } = await client
 
-        .from("songs")
+    .from("songs")
 
-        .select("*")
+    .select("id,title,artist,lyrics")
 
-        .order("artist");
+    .order("artist");
 
 
 
@@ -88,44 +67,6 @@ async function loadAdminSongs(){
 
         console.error(error);
 
-
-        showMessage(
-            "Greška kod učitavanja pjesama."
-        );
-
-
-        return;
-
-
-    }
-
-
-
-
-
-    const container =
-    document.getElementById("adminSongs");
-
-
-
-    container.innerHTML = "";
-
-
-
-    const songs =
-    data || [];
-
-
-
-
-
-    if(songs.length === 0){
-
-
-        container.textContent =
-        "Nema dodanih pjesama.";
-
-
         return;
 
 
@@ -136,125 +77,82 @@ async function loadAdminSongs(){
 
 
 
-    songs.forEach(song=>{
+    allSongs = data;
 
-
-
-
-
-        const box =
-        document.createElement("div");
-
-
-
-        box.className =
-        "admin-song";
+    filteredSongs = data;
 
 
 
 
 
 
-        const info =
-        document.createElement("div");
+    fillArtistFilter();
+
+
+    renderSongs();
+
+
+}
 
 
 
-        info.innerHTML = `
 
-            <h3>${song.title}</h3>
 
-            <p>${song.artist}</p>
+
+
+// =========================
+// FILTER IZVOĐAČA
+// =========================
+
+
+function fillArtistFilter(){
+
+
+
+    const select =
+    document.getElementById("artistFilter");
+
+
+
+    select.innerHTML = `
+
+    <option value="">
+    🎤 Svi izvođači
+    </option>
+
+    `;
+
+
+
+
+
+    const artists = [
+
+        ...new Set(
+
+            allSongs.map(song=>song.artist)
+
+        )
+
+    ].sort();
+
+
+
+
+
+
+
+    artists.forEach(artist=>{
+
+
+
+        select.innerHTML += `
+
+        <option value="${artist}">
+        ${artist}
+        </option>
 
         `;
-
-
-
-
-
-
-
-        const buttons =
-        document.createElement("div");
-
-
-
-
-
-
-        const editButton =
-        document.createElement("button");
-
-
-
-        editButton.type =
-        "button";
-
-
-
-        editButton.textContent =
-        "✏️";
-
-
-
-        editButton.onclick = ()=>{
-
-            editSong(song.id);
-
-        };
-
-
-
-
-
-
-
-
-        const deleteButton =
-        document.createElement("button");
-
-
-
-        deleteButton.type =
-        "button";
-
-
-
-        deleteButton.textContent =
-        "🗑️";
-
-
-
-        deleteButton.onclick = ()=>{
-
-            deleteSong(song.id);
-
-        };
-
-
-
-
-
-
-        buttons.appendChild(editButton);
-
-        buttons.appendChild(deleteButton);
-
-
-
-
-
-
-        box.appendChild(info);
-
-        box.appendChild(buttons);
-
-
-
-
-        container.appendChild(box);
-
-
 
 
 
@@ -270,50 +168,37 @@ async function loadAdminSongs(){
 
 
 
-
-
 // =========================
-// SPREMANJE
+// PRIKAZ PJESAMA
 // =========================
 
 
-async function saveSong(){
+function renderSongs(){
+
+
+
+    const div =
+    document.getElementById("adminSongs");
+
+
+
+    const counter =
+    document.getElementById("songCounter");
+
+
+
+    div.innerHTML = "";
 
 
 
 
 
-    const title =
-    document.getElementById("title")
-    .value.trim();
+    if(counter){
 
 
+        counter.textContent =
 
-    const artist =
-    document.getElementById("artist")
-    .value.trim();
-
-
-
-    const lyrics =
-    document.getElementById("lyrics")
-    .value.trim();
-
-
-
-
-
-
-    if(!title || !artist || !lyrics){
-
-
-
-        showMessage(
-            "Ispuni sva polja."
-        );
-
-
-        return;
+        `${filteredSongs.length} pjesama`;
 
 
     }
@@ -322,136 +207,368 @@ async function saveSong(){
 
 
 
-    const button =
-    document.querySelector(".save-button");
 
+    const start =
 
+    (currentPage - 1)
+    *
+    songsPerPage;
 
-    button.disabled = true;
 
 
 
-    button.textContent =
-    "Spremanje...";
 
+    const end =
 
+    start + songsPerPage;
 
 
 
 
 
-    let result;
 
+    const pageSongs =
 
-
-
-
-
-    if(editId){
-
-
-
-        result = await client
-
-            .from("songs")
-
-            .update({
-
-                title,
-
-                artist,
-
-                lyrics
-
-            })
-
-            .eq("id", editId);
-
-
-
-
-
-    }
-    else {
-
-
-
-        result = await client
-
-            .from("songs")
-
-            .insert({
-
-                title,
-
-                artist,
-
-                lyrics
-
-            });
-
-
-
-    }
-
-
-
-
-
-
-
-    button.disabled = false;
-
-
-
-    button.textContent =
-    "💾 Spremi pjesmu";
-
-
-
-
-
-
-
-    if(result.error){
-
-
-
-        console.error(result.error);
-
-
-
-        showMessage(
-            result.error.message
-        );
-
-
-
-        return;
-
-
-    }
-
-
-
-
-
-
-
-    showMessage(
-        "Spremljeno ✅"
+    filteredSongs.slice(
+        start,
+        end
     );
 
 
 
 
-    clearForm();
 
 
 
-    await loadAdminSongs();
+    pageSongs.forEach(song=>{
 
 
+
+        div.innerHTML += `
+
+
+
+        <div class="admin-song">
+
+
+            <div>
+
+
+                <h3>
+                ${song.title}
+                </h3>
+
+
+                <p>
+                ${song.artist}
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div>
+
+
+                <button onclick="openEdit(${song.id})">
+
+                ✏️
+
+                </button>
+
+
+
+                <button onclick="deleteSong(${song.id})">
+
+                🗑️
+
+                </button>
+
+
+
+            </div>
+
+
+        </div>
+
+
+        `;
+
+
+
+    });
+
+
+
+
+
+
+    renderPagination();
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// PAGINATION
+// =========================
+
+
+function renderPagination(){
+
+
+
+    const div =
+    document.getElementById("pagination");
+
+
+
+    if(!div){
+
+        return;
+
+    }
+
+
+
+
+
+    div.innerHTML = "";
+
+
+
+
+
+    const pages =
+
+    Math.ceil(
+        filteredSongs.length /
+        songsPerPage
+    );
+
+
+
+
+
+
+    for(let i=1;i<=pages;i++){
+
+
+
+        div.innerHTML += `
+
+
+        <button
+
+        onclick="changePage(${i})"
+
+        class="cancel-button">
+
+
+        ${i}
+
+
+        </button>
+
+
+        `;
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+function changePage(page){
+
+
+
+    currentPage = page;
+
+
+    renderSongs();
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// PRETRAGA
+// =========================
+
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+
+const search =
+document.getElementById("adminSearch");
+
+
+
+const filter =
+document.getElementById("artistFilter");
+
+
+
+
+
+if(search){
+
+
+
+search.addEventListener(
+"input",
+applyFilters
+);
+
+
+}
+
+
+
+
+
+if(filter){
+
+
+
+filter.addEventListener(
+"change",
+applyFilters
+);
+
+
+}
+
+
+
+
+
+checkLogin();
+
+
+loadSongs();
+
+
+
+}
+
+
+
+);
+
+// =========================
+// PRIMJENA FILTERA
+// =========================
+
+
+function applyFilters(){
+
+
+
+    const text =
+
+    document
+    .getElementById("adminSearch")
+    .value
+    .toLowerCase();
+
+
+
+
+
+    const artist =
+
+    document
+    .getElementById("artistFilter")
+    .value;
+
+
+
+
+
+
+    filteredSongs = allSongs.filter(song=>{
+
+
+
+        const matchesText =
+
+
+        song.title
+        .toLowerCase()
+        .includes(text)
+
+
+
+        ||
+
+
+
+        song.artist
+        .toLowerCase()
+        .includes(text);
+
+
+
+
+
+
+        const matchesArtist =
+
+
+        artist === ""
+
+        ||
+
+        song.artist === artist;
+
+
+
+
+
+
+        return matchesText && matchesArtist;
+
+
+
+    });
+
+
+
+
+
+
+    currentPage = 1;
+
+
+    renderSongs();
 
 
 
@@ -464,25 +581,71 @@ async function saveSong(){
 
 
 
-
 // =========================
-// UREĐIVANJE
+// DODAVANJE PJESME
 // =========================
 
 
-async function editSong(id){
+async function saveSong(){
 
 
 
-    const { data, error } = await client
+    const title =
+    document.getElementById("title")
+    .value
+    .trim();
 
-        .from("songs")
 
-        .select("*")
 
-        .eq("id", id)
+    const artist =
+    document.getElementById("artist")
+    .value
+    .trim();
 
-        .single();
+
+
+    const lyrics =
+    document.getElementById("lyrics")
+    .value
+    .trim();
+
+
+
+
+
+
+    if(!title || !artist || !lyrics){
+
+
+        showMessage(
+        "Ispuni sva polja."
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    const {error} =
+
+    await client
+    .from("songs")
+    .insert({
+
+        title:title,
+
+        artist:artist,
+
+        lyrics:lyrics
+
+    });
+
 
 
 
@@ -492,10 +655,71 @@ async function editSong(id){
     if(error){
 
 
+
         console.error(error);
+
+
+        showMessage(
+        error.message
+        );
+
 
         return;
 
+
+    }
+
+
+
+
+
+
+    clearForm();
+
+
+    showMessage(
+    "Pjesma dodana ✅"
+    );
+
+
+
+    await loadSongs();
+
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// OTVORI MODAL
+// =========================
+
+
+function openEdit(id){
+
+
+
+    const song =
+
+    allSongs.find(
+
+        s=>s.id===id
+
+    );
+
+
+
+
+
+    if(!song){
+
+        return;
 
     }
 
@@ -510,38 +734,182 @@ async function editSong(id){
 
 
 
-    document.getElementById("title")
-    .value =
-    data.title;
+
+    document.getElementById("editTitle")
+    .value = song.title;
 
 
 
-    document.getElementById("artist")
-    .value =
-    data.artist;
+    document.getElementById("editArtist")
+    .value = song.artist;
 
 
 
-    document.getElementById("lyrics")
-    .value =
-    data.lyrics;
+    document.getElementById("editLyrics")
+    .value = song.lyrics;
 
 
 
 
 
-    window.scrollTo({
 
-        top:0,
 
-        behavior:"smooth"
-
-    });
+    document.getElementById("editModal")
+    .style.display="block";
 
 
 
 }
 
+
+
+
+
+
+
+
+// =========================
+// ZATVORI MODAL
+// =========================
+
+
+function closeModal(){
+
+
+
+    document.getElementById("editModal")
+    .style.display="none";
+
+
+
+    editId=null;
+
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// UPDATE PJESME
+// =========================
+
+
+async function updateSong(){
+
+
+
+    if(!editId){
+
+        return;
+
+    }
+
+
+
+
+
+
+    const title =
+
+    document
+    .getElementById("editTitle")
+    .value
+    .trim();
+
+
+
+
+
+    const artist =
+
+    document
+    .getElementById("editArtist")
+    .value
+    .trim();
+
+
+
+
+
+    const lyrics =
+
+    document
+    .getElementById("editLyrics")
+    .value
+    .trim();
+
+
+
+
+
+
+    const {error}=
+
+    await client
+    .from("songs")
+    .update({
+
+        title:title,
+
+        artist:artist,
+
+        lyrics:lyrics
+
+    })
+
+    .eq(
+        "id",
+        editId
+    );
+
+
+
+
+
+
+
+
+    if(error){
+
+
+        console.error(error);
+
+
+        showMessage(
+        "Greška kod spremanja."
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    closeModal();
+
+
+    showMessage(
+    "Izmjene spremljene ✅"
+    );
+
+
+
+    await loadSongs();
+
+
+
+}
 
 
 
@@ -559,16 +927,19 @@ async function deleteSong(id){
 
 
 
+    const song =
 
+    allSongs.find(
 
-    const potvrda =
-    confirm(
-        "Želiš li obrisati ovu pjesmu?"
+        s=>s.id===id
+
     );
 
 
 
-    if(!potvrda){
+
+
+    if(!song){
 
         return;
 
@@ -579,13 +950,42 @@ async function deleteSong(id){
 
 
 
-    const { error } = await client
+    const confirmDelete =
 
-        .from("songs")
+    confirm(
 
-        .delete()
+    `Obrisati "${song.title}"?`
 
-        .eq("id", id);
+    );
+
+
+
+
+
+
+    if(!confirmDelete){
+
+        return;
+
+    }
+
+
+
+
+
+
+
+    const {error}=
+
+    await client
+    .from("songs")
+    .delete()
+    .eq(
+        "id",
+        id
+    );
+
+
 
 
 
@@ -595,11 +995,12 @@ async function deleteSong(id){
     if(error){
 
 
+
         console.error(error);
 
 
         showMessage(
-            "Greška kod brisanja."
+        "Greška kod brisanja."
         );
 
 
@@ -612,15 +1013,15 @@ async function deleteSong(id){
 
 
 
+
+
     showMessage(
-        "Pjesma obrisana."
+    "Pjesma obrisana 🗑️"
     );
 
 
 
-    await loadAdminSongs();
-
-
+    await loadSongs();
 
 
 
@@ -633,9 +1034,8 @@ async function deleteSong(id){
 
 
 
-
 // =========================
-// ČIŠĆENJE FORME
+// ČIŠĆENJE
 // =========================
 
 
@@ -643,22 +1043,18 @@ function clearForm(){
 
 
 
-    editId = null;
-
-
-
     document.getElementById("title")
-    .value = "";
+    .value="";
 
 
 
     document.getElementById("artist")
-    .value = "";
+    .value="";
 
 
 
     document.getElementById("lyrics")
-    .value = "";
+    .value="";
 
 
 
@@ -671,9 +1067,52 @@ function clearForm(){
 
 
 
+// =========================
+// PORUKA
+// =========================
+
+
+function showMessage(text){
+
+
+
+    const box =
+    document.getElementById("message");
+
+
+
+    if(box){
+
+
+        box.textContent=text;
+
+
+
+        setTimeout(()=>{
+
+
+            box.textContent="";
+
+
+        },3000);
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
 
 // =========================
-// ODJAVA
+// LOGOUT
 // =========================
 
 
@@ -691,11 +1130,3 @@ async function logout(){
 
 
 }
-
-
-
-
-
-
-
-loadAdminSongs();

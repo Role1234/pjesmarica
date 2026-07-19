@@ -1072,3 +1072,251 @@ label {
 
 
 }
+
+/* =========================
+   ADMIN V3 DODACI
+========================= */
+
+
+/* FILTERI */
+
+
+#adminSearch,
+#artistFilter {
+
+    margin-bottom:15px;
+
+}
+
+
+
+#artistFilter {
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+/* BROJAČ */
+
+
+#songCounter {
+
+    font-size:16px;
+
+    margin:15px 0;
+
+}
+
+
+
+
+
+
+
+/* PAGINATION */
+
+
+#pagination {
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+}
+
+
+
+#pagination button {
+
+
+    min-width:45px;
+
+    padding:10px 15px;
+
+    border-radius:20px;
+
+    border:2px solid #d4af37;
+
+    background:#374151;
+
+    color:#d4af37;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+
+}
+
+
+
+#pagination button:hover {
+
+
+    background:#d4af37;
+
+    color:#111827;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MODAL
+========================= */
+
+
+#editModal {
+
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:
+
+    rgba(0,0,0,0.75);
+
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+
+
+
+}
+
+
+
+
+
+
+#editModal .song-page {
+
+
+    max-width:700px;
+
+    width:90%;
+
+    animation:modalShow 0.25s ease;
+
+
+}
+
+
+
+
+
+
+@keyframes modalShow {
+
+
+from {
+
+    opacity:0;
+
+    transform:translateY(-30px);
+
+}
+
+
+
+to {
+
+
+    opacity:1;
+
+    transform:translateY(0);
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+/* ADMIN GUMB */
+
+
+.admin-button {
+
+
+    cursor:pointer;
+
+    border:none;
+
+    font-size:15px;
+
+
+}
+
+
+
+
+
+
+/* MOBITEL ADMIN */
+
+
+@media(max-width:700px){
+
+
+
+#editModal .song-page {
+
+
+    width:95%;
+
+    max-height:90vh;
+
+    overflow:auto;
+
+
+}
+
+
+
+
+
+#pagination button {
+
+
+    min-width:40px;
+
+    padding:8px 12px;
+
+
+}
+
+
+
+}
