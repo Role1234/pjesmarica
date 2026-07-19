@@ -7,7 +7,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pjesmarica</title>
+<meta name="description" content="Pjesmarica - pregled i pretraživanje pjesama domaćih izvođača.">
+
+
+<title>Pjesmarica - Izvorne pjesme</title>
 
 
 <link rel="stylesheet" href="style.css">
@@ -22,37 +25,36 @@
 <body>
 
 
+
 <header class="topbar">
 
 
 <a href="index.html" class="logo">
 
-    <div class="logo-icon">
-        🎵
-    </div>
 
-    <div>
-        <h1>Pjesmarica</h1>
-        <p>Izvorne pjesme</p>
-    </div>
+<div class="logo-icon">
+🎵
+</div>
+
+
+<div>
+
+<h1>Pjesmarica</h1>
+
+<p>Izvorne pjesme</p>
+
+</div>
+
 
 </a>
-
 
 
 
 <a href="login.html" class="admin-button">
+
 🔐 Admin
+
 </a>
-
-
-
-
-<input
-type="text"
-id="search"
-placeholder="🔍 Pretraži izvođača ili pjesmu..."
->
 
 
 
@@ -61,19 +63,44 @@ placeholder="🔍 Pretraži izvođača ili pjesmu..."
 
 
 
+<input
+
+type="text"
+
+id="search"
+
+autocomplete="off"
+
+aria-label="Pretraživanje pjesama"
+
+placeholder="🔍 Pretraži izvođača ili pjesmu..."
+
+>
+
+
+
+
 <main>
+
 
 
 <div id="backButton"></div>
 
 
+
 <h2 class="section-title">
+
 🎤 Izvođači
+
 </h2>
 
 
 
-<div id="artists"></div>
+<div id="artists">
+
+Učitavanje izvođača...
+
+</div>
 
 
 

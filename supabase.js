@@ -1,8 +1,20 @@
-const supabaseUrl = "https://kahrsndwcptpnilwmiqh.supabase.co";
+// =========================
+// SUPABASE KONFIGURACIJA
+// =========================
 
-const supabaseKey = "sb_publishable_nDgJ0ZBII3Zj97o05Bf6pQ_DYfKauBx";
+
+const SUPABASE_URL = 
+"https://kahrsndwcptpnilwmiqh.supabase.co";
+
+
+const SUPABASE_KEY = 
+"sb_publishable_nDgJ0ZBII3Zj97o05Bf6pQ_DYfKauBx";
+
+
+
+// Kreiranje klijenta
 
 const client = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
+    SUPABASE_URL,
+    SUPABASE_KEY
 );

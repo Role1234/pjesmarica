@@ -7,16 +7,25 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
+<meta name="description" content="Administracija pjesmarice - dodavanje i uređivanje pjesama.">
+
+
 <title>Admin - Pjesmarica</title>
+
 
 <link rel="stylesheet" href="style.css">
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 </head>
 
 
+
 <body>
+
 
 
 <header class="topbar">
@@ -42,7 +51,10 @@
 </div>
 
 
+
 </header>
+
+
 
 
 
@@ -53,61 +65,129 @@
 <div class="song-page">
 
 
+
 <h2 class="admin-title">
+
 Dodaj / Uredi pjesmu
+
 </h2>
 
 
 
-<input 
+
+
+<input
+
 id="songId"
+
 type="hidden"
+
 >
 
 
 
-<label>
+
+
+
+
+<label for="title">
+
 Naslov pjesme
+
 </label>
 
 
+
 <input
+
 id="title"
+
+name="title"
+
 class="admin-input"
+
+type="text"
+
+autocomplete="off"
+
+required
+
 placeholder="Naslov pjesme"
+
 >
 
 
 
-<label>
+
+
+
+
+<label for="artist">
+
 Izvođač
+
 </label>
+
 
 
 <input
+
 id="artist"
+
+name="artist"
+
 class="admin-input"
+
+type="text"
+
+autocomplete="off"
+
+required
+
 placeholder="Izvođač"
+
 >
 
 
 
-<label>
+
+
+
+
+<label for="lyrics">
+
 Tekst pjesme
+
 </label>
+
 
 
 <textarea
+
 id="lyrics"
+
+name="lyrics"
+
 class="admin-input admin-textarea"
+
+required
+
 placeholder="Tekst pjesme"
+
 ></textarea>
 
 
 
 
+
+
+
 <button
+
+type="button"
+
 class="save-button"
+
 onclick="saveSong()">
 
 💾 Spremi pjesmu
@@ -116,8 +196,16 @@ onclick="saveSong()">
 
 
 
+
+
+
+
 <button
+
+type="button"
+
 class="cancel-button"
+
 onclick="clearForm()">
 
 🧹 Očisti
@@ -126,8 +214,16 @@ onclick="clearForm()">
 
 
 
+
+
+
+
 <button
+
+type="button"
+
 class="cancel-button"
+
 onclick="logout()">
 
 🚪 Odjava
@@ -136,10 +232,20 @@ onclick="logout()">
 
 
 
+
+
+
+
 <p id="message"></p>
 
 
+
+
+
 </div>
+
+
+
 
 
 
@@ -149,15 +255,32 @@ onclick="logout()">
 <div class="song-page">
 
 
+
 <h2 class="admin-title">
+
 Sve pjesme
+
 </h2>
 
 
-<div id="adminSongs"></div>
+
+
+
+<div id="adminSongs">
+
+Učitavanje pjesama...
+
+</div>
+
+
+
 
 
 </div>
+
+
+
+
 
 
 
@@ -166,9 +289,15 @@ Sve pjesme
 
 
 
+
+
+
 <script src="supabase.js"></script>
 
 <script src="admin.js"></script>
+
+
+
 
 
 </body>

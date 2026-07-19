@@ -4,41 +4,89 @@ let currentArtist = null;
 
 
 // =========================
+// POMOĆNE FUNKCIJE
+// =========================
+
+function clearContent(){
+
+    document.getElementById("artists").innerHTML = "";
+
+    document.getElementById("songs").innerHTML = "";
+
+}
+
+
+
+function scrollTop(){
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+
+// =========================
 // UČITAVANJE PJESAMA
 // =========================
 
+
 async function loadSongs(){
 
+
     const { data, error } = await client
+
         .from("songs")
+
         .select("*")
+
         .order("artist");
+
 
 
     if(error){
 
         console.error(error);
+
+        document.getElementById("artists").textContent =
+        "Greška kod učitavanja pjesama.";
+
         return;
 
     }
 
 
-    allSongs = data;
+
+    allSongs = data || [];
 
 
-    const params = new URLSearchParams(window.location.search);
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+
     const artist = params.get("artist");
+
 
 
     if(artist){
 
         openArtist(artist);
 
-    } else {
+    }
+
+    else {
 
         displayArtists();
 
     }
+
 
 }
 
@@ -47,31 +95,35 @@ async function loadSongs(){
 
 
 // =========================
-// PRIKAZ SVIH IZVOĐAČA
+// PRIKAZ IZVOĐAČA
 // =========================
+
 
 function displayArtists(){
 
 
-    // ukloni artist iz URL-a
+    currentArtist = null;
+
+
+
     window.history.replaceState(
+
         {},
+
         document.title,
+
         "index.html"
+
     );
 
 
-    const artistsDiv = document.getElementById("artists");
 
-    const songsDiv = document.getElementById("songs");
+    clearContent();
 
-
-    artistsDiv.innerHTML = "";
-
-    songsDiv.innerHTML = "";
 
 
     document.getElementById("backButton").innerHTML = "";
+
 
 
     document.querySelector(".section-title").textContent =
@@ -79,15 +131,43 @@ function displayArtists(){
 
 
 
-    const artists = [...new Set(
+    const artists = [
 
-        allSongs.map(song => song.artist)
+        ...new Set(
 
-    )];
+            allSongs.map(song => song.artist)
+
+        )
+
+    ]
+
+    .sort((a,b)=>
+
+        a.localeCompare(b)
+
+    );
 
 
 
-    artists.forEach(artist => {
+
+    const artistsDiv =
+    document.getElementById("artists");
+
+
+
+    if(artists.length === 0){
+
+        artistsDiv.textContent =
+        "Nema dodanih pjesama.";
+
+        return;
+
+    }
+
+
+
+
+    artists.forEach(artist=>{
 
 
         const count = allSongs.filter(
@@ -98,27 +178,35 @@ function displayArtists(){
 
 
 
-        artistsDiv.innerHTML += `
+        const box = document.createElement("div");
 
 
-        <div class="artist-box"
-        onclick="openArtist('${artist}')">
+        box.className = "artist-box";
 
+
+        box.onclick = ()=>{
+
+            openArtist(artist);
+
+        };
+
+
+
+        box.innerHTML = `
 
             <h2>
             🎤 ${artist}
             </h2>
 
-
             <p>
-            ${count} pjesama
+            🎵 ${count} pjesama
             </p>
 
-
-        </div>
-
-
         `;
+
+
+
+        artistsDiv.appendChild(box);
 
 
     });
@@ -131,8 +219,9 @@ function displayArtists(){
 
 
 // =========================
-// PRIKAZ PJESAMA IZVOĐAČA
+// PJESME IZVOĐAČA
 // =========================
+
 
 function openArtist(artist){
 
@@ -140,31 +229,30 @@ function openArtist(artist){
     currentArtist = artist;
 
 
-    document.getElementById("artists").innerHTML = "";
 
-
-    const songsDiv = document.getElementById("songs");
-
-
-    songsDiv.innerHTML = "";
+    clearContent();
 
 
 
-    document.getElementById("backButton").innerHTML = `
+    const back =
+    document.getElementById("backButton");
 
 
-    <button class="back-button"
 
-    onclick="displayArtists()">
+    back.innerHTML = `
 
+        <button class="back-button">
 
-    ← Svi izvođači
+        ← Svi izvođači
 
-
-    </button>
-
+        </button>
 
     `;
+
+
+
+    back.querySelector("button").onclick =
+    displayArtists;
 
 
 
@@ -182,39 +270,50 @@ function openArtist(artist){
 
 
 
-    songs.forEach(song => {
+    const songsDiv =
+    document.getElementById("songs");
 
 
 
-        songsDiv.innerHTML += `
+    songs.forEach(song=>{
 
 
-        <div class="song"
-
-        onclick="openSong(${song.id})">
+        const box = document.createElement("div");
 
 
-            <h2>
-            ${song.title}
-            </h2>
+        box.className="song";
 
 
-            <h3>
-            ${song.artist}
-            </h3>
+        box.onclick = ()=>{
+
+            openSong(song.id);
+
+        };
 
 
-        </div>
 
+        box.innerHTML = `
+
+            <h2>${song.title}</h2>
+
+            <h3>${song.artist}</h3>
 
         `;
+
+
+
+        songsDiv.appendChild(box);
+
 
 
     });
 
 
-}
 
+    scrollTop();
+
+
+}
 
 
 
@@ -224,7 +323,25 @@ function openArtist(artist){
 // PRETRAGA
 // =========================
 
-const searchInput = document.getElementById("search");
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+
+const searchInput =
+document.getElementById("search");
+
+
+
+if(!searchInput){
+
+    return;
+
+}
+
 
 
 searchInput.addEventListener(
@@ -234,7 +351,8 @@ searchInput.addEventListener(
 function(){
 
 
-    const text = this.value.toLowerCase();
+    const text =
+    this.value.toLowerCase().trim();
 
 
 
@@ -248,60 +366,79 @@ function(){
 
 
 
+    clearContent();
 
-    const results = allSongs.filter(song =>
 
 
-        song.title.toLowerCase().includes(text)
+    const results =
+    allSongs.filter(song=>
+
+        song.title
+        .toLowerCase()
+        .includes(text)
 
         ||
 
-        song.artist.toLowerCase().includes(text)
-
+        song.artist
+        .toLowerCase()
+        .includes(text)
 
     );
 
 
 
-
-    document.getElementById("artists").innerHTML = "";
-
-    document.getElementById("songs").innerHTML = "";
+    const songsDiv =
+    document.getElementById("songs");
 
 
 
+    if(results.length===0){
 
-    results.forEach(song => {
+        songsDiv.textContent =
+        "Nema rezultata.";
 
+        return;
 
-
-        document.getElementById("songs").innerHTML += `
-
-
-        <div class="song"
-
-        onclick="openSong(${song.id})">
+    }
 
 
-            <h2>
-            ${song.title}
-            </h2>
 
 
-            <h3>
-            ${song.artist}
-            </h3>
+    results.forEach(song=>{
 
 
-        </div>
+        const box =
+        document.createElement("div");
 
+
+        box.className="song";
+
+
+        box.onclick=()=>{
+
+            openSong(song.id);
+
+        };
+
+
+
+        box.innerHTML=`
+
+            <h2>${song.title}</h2>
+
+            <h3>${song.artist}</h3>
 
         `;
 
 
 
+        songsDiv.appendChild(box);
+
+
     });
 
+
+});
 
 
 });
@@ -311,19 +448,29 @@ function(){
 
 
 
+// =========================
+// OTVARANJE PJESME
+// =========================
 
-// =========================
-// OTVORI PJESMU
-// =========================
 
 function openSong(id){
 
 
-    const song = allSongs.find(
+    const song =
+    allSongs.find(
 
-        s => s.id === id
+        s=>s.id===id
 
     );
+
+
+
+    if(!song){
+
+        return;
+
+    }
+
 
 
     window.location.href =

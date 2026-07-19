@@ -7,26 +7,39 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin prijava</title>
+
+<meta name="description" content="Admin prijava za Pjesmaricu.">
+
+
+<title>Admin prijava - Pjesmarica</title>
+
 
 <link rel="stylesheet" href="style.css">
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 </head>
+
 
 
 <body>
 
 
+
 <header class="topbar">
+
 
 
 <div class="logo">
 
+
+
 <div class="logo-icon">
 🔐
 </div>
+
 
 
 <div>
@@ -38,50 +51,123 @@
 </div>
 
 
+
 </div>
+
 
 
 </header>
 
 
 
+
+
+
+
 <main>
+
 
 
 <div class="song-page">
 
 
+
+
+
 <h2 class="admin-title">
+
 Prijava administratora
+
 </h2>
 
 
 
+
+
+
+
+
+<label for="email">
+
+Email adresa
+
+</label>
+
+
+
 <input
+
 id="email"
+
+name="email"
+
 class="admin-input"
+
 type="email"
+
+autocomplete="username"
+
 placeholder="Email adresa"
+
+required
+
 >
+
+
+
+
+
+
+
+<label for="password">
+
+Lozinka
+
+</label>
 
 
 
 <input
+
 id="password"
+
+name="password"
+
 class="admin-input"
+
 type="password"
+
+autocomplete="current-password"
+
 placeholder="Lozinka"
+
+required
+
 >
 
 
 
-<button 
+
+
+
+
+<button
+
+type="button"
+
 class="save-button"
+
 onclick="login()">
+
 
 🔐 Prijavi se
 
+
 </button>
+
+
+
+
 
 
 
@@ -89,16 +175,26 @@ onclick="login()">
 
 
 
+
+
+
+
 </div>
+
 
 
 </main>
 
 
 
+
+
+
+
 <script src="supabase.js"></script>
 
 <script src="login.js"></script>
+
 
 
 </body>

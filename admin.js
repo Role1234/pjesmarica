@@ -6,24 +6,57 @@ let editId = null;
 // PROVJERA PRIJAVE
 // =========================
 
+
 async function checkLogin(){
 
 
-    const { data } = await client.auth.getSession();
+    const { data } =
+    await client.auth.getSession();
 
 
 
     if(!data.session){
 
-        window.location.href = "login.html";
+        window.location.href =
+        "login.html";
+
+        return false;
 
     }
+
+
+    return true;
 
 
 }
 
 
+
 checkLogin();
+
+
+
+
+
+
+// =========================
+// PORUKE
+// =========================
+
+
+function showMessage(text){
+
+
+    const message =
+    document.getElementById("message");
+
+
+    message.textContent = text;
+
+
+}
+
+
 
 
 
@@ -37,71 +70,192 @@ checkLogin();
 async function loadAdminSongs(){
 
 
+
     const { data, error } = await client
 
-    .from("songs")
+        .from("songs")
 
-    .select("*")
+        .select("*")
 
-    .order("artist");
+        .order("artist");
+
+
 
 
 
     if(error){
 
+
         console.error(error);
 
+
+        showMessage(
+            "Greška kod učitavanja pjesama."
+        );
+
+
         return;
+
 
     }
 
 
 
-    const div = document.getElementById("adminSongs");
 
 
-    div.innerHTML = "";
+    const container =
+    document.getElementById("adminSongs");
 
 
 
-    data.forEach(song => {
+    container.innerHTML = "";
 
 
-        div.innerHTML += `
+
+    const songs =
+    data || [];
 
 
-        <div class="admin-song">
 
 
-            <div>
 
-                <h3>${song.title}</h3>
-
-                <p>${song.artist}</p>
-
-            </div>
+    if(songs.length === 0){
 
 
-            <div>
+        container.textContent =
+        "Nema dodanih pjesama.";
 
 
-                <button onclick="editSong(${song.id})">
-                    ✏️
-                </button>
+        return;
 
 
-                <button onclick="deleteSong(${song.id})">
-                    🗑️
-                </button>
+    }
 
 
-            </div>
 
 
-        </div>
 
+
+    songs.forEach(song=>{
+
+
+
+
+
+        const box =
+        document.createElement("div");
+
+
+
+        box.className =
+        "admin-song";
+
+
+
+
+
+
+        const info =
+        document.createElement("div");
+
+
+
+        info.innerHTML = `
+
+            <h3>${song.title}</h3>
+
+            <p>${song.artist}</p>
 
         `;
+
+
+
+
+
+
+
+        const buttons =
+        document.createElement("div");
+
+
+
+
+
+
+        const editButton =
+        document.createElement("button");
+
+
+
+        editButton.type =
+        "button";
+
+
+
+        editButton.textContent =
+        "✏️";
+
+
+
+        editButton.onclick = ()=>{
+
+            editSong(song.id);
+
+        };
+
+
+
+
+
+
+
+
+        const deleteButton =
+        document.createElement("button");
+
+
+
+        deleteButton.type =
+        "button";
+
+
+
+        deleteButton.textContent =
+        "🗑️";
+
+
+
+        deleteButton.onclick = ()=>{
+
+            deleteSong(song.id);
+
+        };
+
+
+
+
+
+
+        buttons.appendChild(editButton);
+
+        buttons.appendChild(deleteButton);
+
+
+
+
+
+
+        box.appendChild(info);
+
+        box.appendChild(buttons);
+
+
+
+
+        container.appendChild(box);
+
+
+
 
 
     });
@@ -114,8 +268,12 @@ async function loadAdminSongs(){
 
 
 
+
+
+
+
 // =========================
-// SPREMANJE PJESME
+// SPREMANJE
 // =========================
 
 
@@ -123,29 +281,69 @@ async function saveSong(){
 
 
 
-    const title = document.getElementById("title").value;
 
-    const artist = document.getElementById("artist").value;
 
-    const lyrics = document.getElementById("lyrics").value;
+    const title =
+    document.getElementById("title")
+    .value.trim();
+
+
+
+    const artist =
+    document.getElementById("artist")
+    .value.trim();
+
+
+
+    const lyrics =
+    document.getElementById("lyrics")
+    .value.trim();
+
+
+
 
 
 
     if(!title || !artist || !lyrics){
 
 
-        document.getElementById("message").textContent =
-        "Ispuni sva polja.";
+
+        showMessage(
+            "Ispuni sva polja."
+        );
 
 
         return;
+
 
     }
 
 
 
 
+
+    const button =
+    document.querySelector(".save-button");
+
+
+
+    button.disabled = true;
+
+
+
+    button.textContent =
+    "Spremanje...";
+
+
+
+
+
+
+
     let result;
+
+
+
 
 
 
@@ -155,44 +353,62 @@ async function saveSong(){
 
         result = await client
 
-        .from("songs")
+            .from("songs")
 
-        .update({
+            .update({
 
-            title:title,
+                title,
 
-            artist:artist,
+                artist,
 
-            lyrics:lyrics
+                lyrics
 
-        })
+            })
 
-        .eq("id", editId);
+            .eq("id", editId);
+
+
 
 
 
     }
-
     else {
 
 
 
         result = await client
 
-        .from("songs")
+            .from("songs")
 
-        .insert({
+            .insert({
 
-            title:title,
+                title,
 
-            artist:artist,
+                artist,
 
-            lyrics:lyrics
+                lyrics
 
-        });
+            });
+
 
 
     }
+
+
+
+
+
+
+
+    button.disabled = false;
+
+
+
+    button.textContent =
+    "💾 Spremi pjesmu";
+
+
+
 
 
 
@@ -200,11 +416,15 @@ async function saveSong(){
     if(result.error){
 
 
+
         console.error(result.error);
 
 
-        document.getElementById("message").textContent =
-        result.error.message;
+
+        showMessage(
+            result.error.message
+        );
+
 
 
         return;
@@ -216,19 +436,28 @@ async function saveSong(){
 
 
 
-    document.getElementById("message").textContent =
-    "Spremljeno ✅";
+
+
+    showMessage(
+        "Spremljeno ✅"
+    );
+
 
 
 
     clearForm();
 
 
-    loadAdminSongs();
+
+    await loadAdminSongs();
+
+
 
 
 
 }
+
+
 
 
 
@@ -247,23 +476,31 @@ async function editSong(id){
 
     const { data, error } = await client
 
-    .from("songs")
+        .from("songs")
 
-    .select("*")
+        .select("*")
 
-    .eq("id", id)
+        .eq("id", id)
 
-    .single();
+        .single();
+
+
+
 
 
 
     if(error){
 
+
         console.error(error);
 
         return;
 
+
     }
+
+
+
 
 
 
@@ -271,16 +508,25 @@ async function editSong(id){
 
 
 
-    document.getElementById("title").value =
+
+
+    document.getElementById("title")
+    .value =
     data.title;
 
 
-    document.getElementById("artist").value =
+
+    document.getElementById("artist")
+    .value =
     data.artist;
 
 
-    document.getElementById("lyrics").value =
+
+    document.getElementById("lyrics")
+    .value =
     data.lyrics;
+
+
 
 
 
@@ -302,6 +548,8 @@ async function editSong(id){
 
 
 
+
+
 // =========================
 // BRISANJE
 // =========================
@@ -311,8 +559,11 @@ async function deleteSong(id){
 
 
 
-    const potvrda = confirm(
-    "Želiš li obrisati ovu pjesmu?"
+
+
+    const potvrda =
+    confirm(
+        "Želiš li obrisati ovu pjesmu?"
     );
 
 
@@ -326,32 +577,56 @@ async function deleteSong(id){
 
 
 
+
+
     const { error } = await client
 
-    .from("songs")
+        .from("songs")
 
-    .delete()
+        .delete()
 
-    .eq("id", id);
+        .eq("id", id);
+
+
 
 
 
 
     if(error){
 
+
         console.error(error);
 
+
+        showMessage(
+            "Greška kod brisanja."
+        );
+
+
         return;
+
 
     }
 
 
 
 
-    loadAdminSongs();
+
+    showMessage(
+        "Pjesma obrisana."
+    );
+
+
+
+    await loadAdminSongs();
+
+
+
 
 
 }
+
+
 
 
 
@@ -372,15 +647,24 @@ function clearForm(){
 
 
 
-    document.getElementById("title").value = "";
+    document.getElementById("title")
+    .value = "";
 
-    document.getElementById("artist").value = "";
 
-    document.getElementById("lyrics").value = "";
+
+    document.getElementById("artist")
+    .value = "";
+
+
+
+    document.getElementById("lyrics")
+    .value = "";
 
 
 
 }
+
+
 
 
 
@@ -401,7 +685,9 @@ async function logout(){
 
 
 
-    window.location.href = "login.html";
+    window.location.href =
+    "login.html";
+
 
 
 }

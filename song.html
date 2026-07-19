@@ -3,15 +3,22 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pjesma - Pjesmarica</title>
 
-    <link rel="stylesheet" href="style.css">
+<meta name="description" content="Pregled teksta pjesme u pjesmarici.">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<title>Pjesma - Pjesmarica</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 </head>
 
@@ -19,27 +26,28 @@
 <body>
 
 
+
 <header class="topbar">
 
 
-    <a href="index.html" class="logo">
+<a href="index.html" class="logo">
 
 
-        <div class="logo-icon">
-            🎵
-        </div>
+<div class="logo-icon">
+🎵
+</div>
 
 
-        <div>
+<div>
 
-            <h1>Pjesmarica</h1>
+<h1>Pjesmarica</h1>
 
-            <p>Izvorne pjesme</p>
+<p>Izvorne pjesme</p>
 
-        </div>
+</div>
 
 
-    </a>
+</a>
 
 
 </header>
@@ -51,35 +59,53 @@
 <main>
 
 
-    <div class="song-page">
 
-
-        <div class="song-header">
-
-
-            <h2 id="title"></h2>
-
-
-            <h3 id="artist"></h3>
-
-
-        </div>
+<div class="song-page">
 
 
 
-        <pre id="lyrics"></pre>
+<div class="song-header">
+
+
+<h2 id="songTitle"></h2>
+
+
+<h3 id="songArtist"></h3>
+
+
+</div>
 
 
 
-       <a id="backButton" class="back">
-    ← Nazad
+
+
+<div id="songLyrics"></div>
+
+
+
+
+
+<a 
+
+id="backButton"
+
+class="back"
+
+href="index.html">
+
+← Nazad
+
 </a>
 
 
-    </div>
+
+
+</div>
+
 
 
 </main>
+
 
 
 
