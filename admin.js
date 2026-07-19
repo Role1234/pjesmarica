@@ -76,7 +76,6 @@ async function loadSongs(){
 
 
 
-
     allSongs = data;
 
     filteredSongs = data;
@@ -85,11 +84,85 @@ async function loadSongs(){
 
 
 
-
     fillArtistFilter();
 
+    fillArtistSuggestions();
 
     renderSongs();
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// AUTOCOMPLETE IZVOĐAČA
+// =========================
+
+
+function fillArtistSuggestions(){
+
+
+
+    const list =
+    document.getElementById("artistList");
+
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+
+    list.innerHTML = "";
+
+
+
+
+
+    const artists = [
+
+        ...new Set(
+
+            allSongs.map(
+
+                song => song.artist
+
+            )
+
+        )
+
+    ].sort();
+
+
+
+
+
+
+    artists.forEach(artist => {
+
+
+
+        list.innerHTML += `
+
+
+        <option value="${artist}"></option>
+
+
+        `;
+
+
+
+    });
+
 
 
 }
@@ -114,11 +187,21 @@ function fillArtistFilter(){
 
 
 
+    if(!select){
+
+        return;
+
+    }
+
+
+
     select.innerHTML = `
+
 
     <option value="">
     🎤 Svi izvođači
     </option>
+
 
     `;
 
@@ -130,7 +213,11 @@ function fillArtistFilter(){
 
         ...new Set(
 
-            allSongs.map(song=>song.artist)
+            allSongs.map(
+
+                song => song.artist
+
+            )
 
         )
 
@@ -148,9 +235,13 @@ function fillArtistFilter(){
 
         select.innerHTML += `
 
+
         <option value="${artist}">
+
         ${artist}
+
         </option>
+
 
         `;
 
@@ -161,12 +252,6 @@ function fillArtistFilter(){
 
 
 }
-
-
-
-
-
-
 
 // =========================
 // PRIKAZ PJESAMA
@@ -180,6 +265,11 @@ function renderSongs(){
     const div =
     document.getElementById("adminSongs");
 
+    if(!div){
+
+    return;
+
+}
 
 
     const counter =
