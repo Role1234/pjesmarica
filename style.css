@@ -21,36 +21,6 @@ body {
    HEADER
 ========================= */
 
-/*
-.topbar {
-
-    position: relative;
-
-    background: #1f2937;
-
-    padding: 25px;
-
-    box-shadow: 0 5px 20px rgba(0,0,0,0.35);
-
-}
-
-
-
-.logo {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    max-width: 900px;
-
-    margin: auto;
-
-}
-*/
-
 .topbar {
     display: flex;
     align-items: center;
