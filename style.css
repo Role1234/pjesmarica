@@ -328,65 +328,86 @@ main {
 
 
 
-/* =========================
-   MOBITEL
-========================= */
-
-
-@media(max-width:600px) {
+/* MOBITEL */
+@media (max-width: 600px) {
 
 
     .topbar {
-
-        padding: 18px;
-
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
     }
 
 
-    .logo h1 {
-
-        font-size: 25px;
-
+    .logo {
+        justify-content: center;
     }
 
 
     .logo-icon {
+        font-size: 32px;
+    }
 
-        font-size: 35px;
 
+    .logo h1 {
+        font-size: 26px;
+        text-align: center;
+    }
+
+
+    .logo p {
+        text-align: center;
+        font-size: 14px;
+    }
+
+
+    .admin-button {
+        position: static;
+        width: 100%;
+        text-align: center;
+    }
+
+
+    #search {
+        width: 100%;
+        box-sizing: border-box;
     }
 
 
     main {
+        padding: 10px;
+    }
 
-        padding: 15px;
 
+    .artist-box,
+    .song {
+        width: 100%;
+        box-sizing: border-box;
     }
 
 
     .song-page {
-
-        padding: 20px;
-
-        margin-top: 20px;
-
-    }
-
-
-    #title {
-
-        font-size: 28px;
-
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
     }
 
 
     #lyrics {
-
-        font-size: 17px;
-
+        font-size: 16px;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
     }
 
+
+    .section-title {
+        text-align: center;
+        font-size: 22px;
+    }
+
+
 }
+
 
 /* ADMIN FORMA */
 
