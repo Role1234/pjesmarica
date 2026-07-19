@@ -21,7 +21,7 @@ body {
    HEADER
 ========================= */
 
-
+/*
 .topbar {
 
     position: relative;
@@ -49,7 +49,26 @@ body {
     margin: auto;
 
 }
+*/
 
+.topbar {
+    display: flex;
+    align-items: center;
+    background: #1f2937;
+    justify-content: center;
+    position: relative;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.35);
+}
+
+
+.logo {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 .logo-icon {
