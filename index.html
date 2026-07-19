@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pjesmarica</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+
+<div class="logo">
+
+
+<div class="logo-icon">
+🎵
+</div>
+
+
+<div>
+
+<h1>Pjesmarica</h1>
+
+<p>Izvorne pjesme</p>
+
+</div>
+
+
+</div>
+
+
+
+<a href="login.html" class="admin-button">
+🔐 Admin
+</a>
+
+
+
+
+<input
+type="text"
+id="search"
+placeholder="🔍 Pretraži izvođača ili pjesmu..."
+>
+
+
+
+</header>
+
+
+
+
+<main>
+
+
+<div id="backButton"></div>
+
+
+<h2 class="section-title">
+🎤 Izvođači
+</h2>
+
+
+
+<div id="artists"></div>
+
+
+
+<div id="songs"></div>
+
+
+
+</main>
+
+
+
+
+<script src="supabase.js"></script>
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>

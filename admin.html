@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="hr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin - Pjesmarica</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+
+<div class="logo">
+
+
+<div class="logo-icon">
+🎵
+</div>
+
+
+<div>
+
+<h1>Upravljanje pjesmama</h1>
+
+<p>Admin Pjesmarice</p>
+
+</div>
+
+
+</div>
+
+
+</header>
+
+
+
+<main>
+
+
+
+<div class="song-page">
+
+
+<h2 class="admin-title">
+Dodaj / Uredi pjesmu
+</h2>
+
+
+
+<input 
+id="songId"
+type="hidden"
+>
+
+
+
+<label>
+Naslov pjesme
+</label>
+
+
+<input
+id="title"
+class="admin-input"
+placeholder="Naslov pjesme"
+>
+
+
+
+<label>
+Izvođač
+</label>
+
+
+<input
+id="artist"
+class="admin-input"
+placeholder="Izvođač"
+>
+
+
+
+<label>
+Tekst pjesme
+</label>
+
+
+<textarea
+id="lyrics"
+class="admin-input admin-textarea"
+placeholder="Tekst pjesme"
+></textarea>
+
+
+
+
+<button
+class="save-button"
+onclick="saveSong()">
+
+💾 Spremi pjesmu
+
+</button>
+
+
+
+<button
+class="cancel-button"
+onclick="clearForm()">
+
+🧹 Očisti
+
+</button>
+
+
+
+<button
+class="cancel-button"
+onclick="logout()">
+
+🚪 Odjava
+
+</button>
+
+
+
+<p id="message"></p>
+
+
+</div>
+
+
+
+
+
+
+<div class="song-page">
+
+
+<h2 class="admin-title">
+Sve pjesme
+</h2>
+
+
+<div id="adminSongs"></div>
+
+
+</div>
+
+
+
+</main>
+
+
+
+
+<script src="supabase.js"></script>
+
+<script src="admin.js"></script>
+
+
+</body>
+
+</html>
